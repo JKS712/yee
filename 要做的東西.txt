@@ -1,9 +1,9 @@
 玩家:
 
 1.移動
-2.攻擊 Attack lilblak
-3.血量 HP jk
-4.分數 PlayerScore cosmo
+2.攻擊 Attack (lilblak)
+3.血量 HP (jk)
+4.分數 PlayerScore (cosmo)
 5.定義玩家基本數值
 
 小怪:
@@ -20,7 +20,7 @@ boss:
 場景:
 
 1.buff道具
-2.debuff道具 jk
+2.debuff道具 (jk)
 3.陷阱
 4.定義座標
 

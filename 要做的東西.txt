@@ -1,7 +1,7 @@
 玩家:
 
 1.移動
-2.攻擊 Attack 沈
+2.攻擊 Attack 李
 3.血量 HP 蘿
 4.分數 PlayerScore 張
 5.定義玩家基本數值

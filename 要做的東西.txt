@@ -1,6 +1,6 @@
 玩家:
 
-1.移動
+1.移動 player (cosmo)
 2.攻擊 Attack (lilblak)
 3.血量 HP (jk)
 4.分數 PlayerScore (cosmo)

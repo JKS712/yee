@@ -23,6 +23,6 @@ boss:
 
 1.buff道具 (cosmo)
 2.debuff道具 (jk)
-3.定義座標
+3.定義座標 coordinate 
 
 main

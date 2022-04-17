@@ -16,7 +16,7 @@ double Player::Y()
 void Player::Draw()
 {
     gotoxy(x, y); 
-    cout << "";
+    cout << "船";
 }
 void Player::Erase()
 {

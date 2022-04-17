@@ -15,11 +15,12 @@ double Player::Y()
 }
 void Player::Draw()
 {
-
+    gotoxy(x, y); 
+    cout << "";
 }
 void Player::Erase()
 {
-
+    gotoxy(x, y); cout << "  ";
 }
 void Player::Move()
 {

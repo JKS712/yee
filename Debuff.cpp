@@ -7,13 +7,22 @@
 using namespace std;
 
 int Debuff::getReduceAttackSpeed() {
-    
+    return Attackspeed - 1;
 }
 int Debuff::getReduceDamage() {
-
+    return Damage - 1;
 }
 int Debuff::getReduceSize(){
+    return Size - 1;
+}
+int Debuff::setReduceAttackSpeed() {
 
+}
+int Debuff::setReduceDamage() {
+    
+}
+int Debuff::setReduceSize() {
+    
 }
 void Debuff::printSizeDebuff()
 {
@@ -34,4 +43,11 @@ void Pass::Erase()
 {
     gotoxy(x, y); cout << "  ";
     gotoxy(x, y + 1); cout << "  ";
+}
+void Debuff::Erase()
+{
+    gotoxy(x, y); cout << "  ";
+}
+void Debuff::playerTouch() {
+    
 }

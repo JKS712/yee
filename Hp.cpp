@@ -16,3 +16,6 @@ void Hp::setHurt(int newHurt) {
 void Hp::print() {
 
 }
+int getHurt() {
+
+}

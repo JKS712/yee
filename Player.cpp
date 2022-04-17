@@ -20,7 +20,8 @@ void Player::Draw()
 }
 void Player::Erase()
 {
-    gotoxy(x, y); cout << "  ";
+    gotoxy(x, y);
+    cout << "  ";
 }
 void Player::Move()
 {

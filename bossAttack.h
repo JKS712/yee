@@ -12,8 +12,8 @@ public:
 	double Y() { return y; }
 
 private:
-	int x;
-	int y;
+	double x;
+	double y;
 };
 
 #endif // !BOSSATTACK

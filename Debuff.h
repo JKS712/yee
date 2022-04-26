@@ -21,8 +21,8 @@ public:
 	void playerTouch();
 
 private:
-	int x; // x coordinate
-	int y; // y coordinate 
+	double x; // x coordinate
+	double y; // y coordinate 
 };
 
 #endif // !DEBUFF_H

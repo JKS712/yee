@@ -1,7 +1,7 @@
 #ifndef BOSSATTACK
 #define BOSSATTACK
 
-class BossAttack
+class bossAttack
 {
 public:
 	BossAttack();

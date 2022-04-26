@@ -23,6 +23,7 @@ public:
 private:
 	double x; // x coordinate
 	double y; // y coordinate 
+	bool touch;
 };
 
 #endif // !DEBUFF_H

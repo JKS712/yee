@@ -8,9 +8,9 @@ public:
 	int getReduceSize();
 	int getReduceAttackSpeed();
 	int getReduceDamage();
-	int setReduceAttackSpeed();
-	int setReduceDamage();
-	int setReduceSize();
+	void setReduceAttackSpeed();
+	void setReduceDamage();
+	void setReduceSize();
 	void printSizeDebuff();
 	void printAttackSpeedDebuff();
 	void printDamageDebuff();

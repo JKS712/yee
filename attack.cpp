@@ -1,7 +1,9 @@
 #include<iostream>
 #include"attack.h"
 	
-
+attack::attack(){
+	int attack = 1;
+}
 
 int attack::getSize(){
 	return size;
@@ -22,3 +24,11 @@ void attack::setAttackSpeed(int newAttackSpeed){
 	attackSpeed=newAttackSpeed;
 }
 
+void attack::printAttack() {
+	gotoxy(x, y); cout << "KKK";
+	gotoxy(x, y + 1); cout << " K ";
+}
+void attack::eraseAttack() {
+	gotoxy(x, y); cout << "  ";
+	gotoxy(x, y + 1); cout << "  ";
+}

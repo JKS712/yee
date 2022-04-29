@@ -1,10 +1,8 @@
-#ifndef ENEMY_H
-#define ENEMY_H
+#ifndef ENEMYHP_H
+#define ENEMYHP_H
 
-class enemy{
+class enemyHP{
 public:
-	int getSize();
-	void setSize(int,int);
 	int getHurt();
 	void setHurt(int);
 	int getEnemyHP();

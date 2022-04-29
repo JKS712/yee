@@ -3,6 +3,7 @@
 
 class enemyHP{
 public:
+	int enemyHP();
 	int getHurt();
 	void setHurt(int);
 	int getEnemyHP();

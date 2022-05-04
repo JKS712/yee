@@ -7,6 +7,8 @@ public:
 	void setScore(int);
 	void printScore();
 	void eraseScore();
+	double X();
+	double Y();
 
 private:
 	int score;

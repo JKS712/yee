@@ -10,6 +10,10 @@ public:
 	void setHeart(int);
 	void setHurt(int);
 	void print();
+	int x();
+	int y();
+	int x;
+	int y;
 private:
 	int heart;
 	int hurt;

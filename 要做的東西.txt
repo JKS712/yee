@@ -21,7 +21,8 @@ boss:
 
 1.buff道具 (cosmo)
 2.debuff道具 (jk)
-3.定義座標 coordinate 
+
 4.分數 Score (lilblak)
 
 main
+1.定義座標 coordinate 

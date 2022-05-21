@@ -20,8 +20,8 @@ boss:
 
 場景:
 
-1.buff道具 (cosmo)
-2.debuff道具 (jk)
+1.buff道具 (cosmo) [暫緩]
+2.debuff道具 (jk) [暫緩]
 3.XXXX 定義座標 coordinate XXXX (JK) 移至main.cpp 
 4.分數 Score (lilblak)
 

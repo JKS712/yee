@@ -13,12 +13,6 @@ bool Mobs::mobsGoOut() {
 	else
 		return false;
 }
-int Mobs::mobsSummon() {
-	srand(time(NULL));
-	gotoxy(x,y);
-	cout << "x" << endl;
-}
-
 double Mobs::X() {
 	return x; 
 }

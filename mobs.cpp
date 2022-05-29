@@ -15,8 +15,8 @@ bool Mobs::mobsGoOut() {
 }
 int Mobs::mobsSummon() {
 	srand(time(NULL));
-	
-	cout << "x = " << endl;
+	gotoxy(x,y);
+	cout << "x" << endl;
 }
 
 double Mobs::X() {

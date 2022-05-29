@@ -36,11 +36,7 @@ void Mobs::erase() {
 void Mobs::Move()
 {
     Erase();
-    
-    if (gameMode == 1)
-        y += SPEED_SCORE59_EASY; // move a SPEED_SCORE59 unit downward
-    else
-        y += SPEED_SCORE59_HARD;
+    y += 
         
     Draw(); 
 }

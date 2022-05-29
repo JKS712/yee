@@ -33,7 +33,7 @@ void Mobs::erase() {
 	gotoxy(x, y); 
 	cout << "  ";
 }
-void Score59::Move()
+void Mobs::Move()
 {
     Erase();
     

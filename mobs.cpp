@@ -36,7 +36,5 @@ void Mobs::erase() {
 void Mobs::Move()
 {
     Erase();
-    y += 
-        
     Draw(); 
 }

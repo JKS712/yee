@@ -31,7 +31,7 @@ void DrawWhiteSpace(int x1, int y1, int x2, int y2)
         }
     }
 }
-bool StartGame()
+bool Start()
 {
     DrawWhiteSpace(0, 0, BORDER_RIGHT_WIDE, BORDER_DOWN);
 
@@ -59,6 +59,8 @@ bool StartGame()
                 p = passes.erase(p); 
             }
         }
+}
+//Start未做完    
 bool Collision(double x1, double y1, double x2, double y2) {
     if (abs(x1 - x2) < EQUALITY_GAP_X)   
     {

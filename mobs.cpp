@@ -5,7 +5,8 @@ using namespace std;
 #define BORDER_DOWN 28
 
 Mobs::Mobs() {
-
+	this->x = x; 
+	this->y = y; 
 }
 bool Mobs::mobsGoOut() {
 	if (y > BORDER_DOWN)

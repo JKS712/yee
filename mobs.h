@@ -6,13 +6,11 @@ class Mobs
 public:
 	Mobs();
 	bool mobsGoOut();
-	int mobsSummon();
 	double X() { return x; }
 	double Y() { return y; }
 	void mobsPrint();
 	void erase(); 
-
-
+	void move();
 private:
 	double x;
 	double y;

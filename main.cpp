@@ -31,7 +31,34 @@ void DrawWhiteSpace(int x1, int y1, int x2, int y2)
         }
     }
 }
+bool StartGame()
+{
+    DrawWhiteSpace(0, 0, BORDER_RIGHT_WIDE, BORDER_DOWN);
 
+
+    srand(time(nullptr)); 
+    int mapWidth = BORDER_RIGHT - BORDER_LEFT + 1; 
+    int mapLength = BORDER_DOWN - BORDER_UP + 1; 
+    double rnX = 0;
+    double rnY = 0; 
+    for (int i = 0; i < 10; i++) 
+    {
+        rnX = (rand() % mapWidth) + BORDER_LEFT;
+        rnY = (rand() % (mapLength / 2)) + (BORDER_UP); 
+        scores.push_back(Mobs(nX, nY));
+    }
+
+    while (duration < timeLimit) 
+    {
+        for (p = passes.begin(); p != passes.end(); p++) 
+        {
+            p->Move(); 
+            if (p->isOut())
+            {
+                p->Erase(); 
+                p = passes.erase(p); 
+            }
+        }
 bool Collision(double x1, double y1, double x2, double y2) {
     if (abs(x1 - x2) < EQUALITY_GAP_X)   
     {
@@ -45,7 +72,7 @@ bool Collision(double x1, double y1, double x2, double y2) {
 }
 
 void Initialize() {
-    SetConsoleTitle("¥´­¸¾÷");
+    SetConsoleTitle("Â¥Â´Â­Â¸Â¾Ã·");
 
     HANDLE hCon = GetStdHandle(STD_OUTPUT_HANDLE);
     CONSOLE_CURSOR_INFO cci;

@@ -14,8 +14,11 @@ bool Mobs::mobsGoOut() {
 		return false;
 }
 int Mobs::mobsSummon() {
-
+	srand(time(NULL));
+	
+	cout << "x = " << endl;
 }
+
 double Mobs::X() {
 	return x; 
 }
@@ -29,4 +32,15 @@ void Mobs::mobsPrint() {
 void Mobs::erase() {
 	gotoxy(x, y); 
 	cout << "  ";
+}
+void Score59::Move()
+{
+    Erase();
+    
+    if (gameMode == 1)
+        y += SPEED_SCORE59_EASY; // move a SPEED_SCORE59 unit downward
+    else
+        y += SPEED_SCORE59_HARD;
+        
+    Draw(); 
 }

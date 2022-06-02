@@ -39,12 +39,12 @@ bool Start()
     srand(time(nullptr)); 
     int mapWidth = BORDER_RIGHT - BORDER_LEFT + 1; 
     int mapLength = BORDER_DOWN - BORDER_UP + 1; 
-    double rX = 0;
-    double rY = 0; 
+    double nX = 0;
+    double nY = 0; 
     for (int i = 0; i < 10; i++) 
     {
-        rnX = (rand() % mapWidth) + BORDER_LEFT;
-        rnY = (rand() % (mapLength / 2)) + (BORDER_UP); 
+        nX = (rand() % mapWidth) + BORDER_LEFT;
+        nY = (rand() % (mapLength / 2)) + (BORDER_UP); 
         scores.push_back(Mobs(nX, nY));
     }
 

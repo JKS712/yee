@@ -39,8 +39,8 @@ bool Start()
     srand(time(nullptr)); 
     int mapWidth = BORDER_RIGHT - BORDER_LEFT + 1; 
     int mapLength = BORDER_DOWN - BORDER_UP + 1; 
-    double rnX = 0;
-    double rnY = 0; 
+    double rX = 0;
+    double rY = 0; 
     for (int i = 0; i < 10; i++) 
     {
         rnX = (rand() % mapWidth) + BORDER_LEFT;

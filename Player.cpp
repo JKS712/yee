@@ -33,6 +33,14 @@ void Player::Erase()
     gotoxy(x, y);
     cout << "  ";
 }
+void Player::printAttack() {
+    gotoxy(x, y); cout << "KKK";
+    gotoxy(x, y + 1); cout << " K ";
+}
+void Player::eraseAttack() {
+    gotoxy(x, y); cout << "  ";
+    gotoxy(x, y + 1); cout << "  ";
+}
 void Player::Move()
 {
     if(kbhit())

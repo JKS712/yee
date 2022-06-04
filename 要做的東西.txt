@@ -9,7 +9,7 @@
 1.攻擊 (lilblak)
 2.移動
 3.血量 (lilblak)
-4.生成
+4.生成(main JK)
 
 boss:
 

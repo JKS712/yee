@@ -12,6 +12,8 @@ public:
     double Y();
     void Draw();
     void Erase();
+    void printAttack();
+    void eraseAttack();
     void Move();
 };
 

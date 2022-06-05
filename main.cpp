@@ -41,15 +41,15 @@ using namespace std;
 #define LOSE_GAME_POINT 5
 #define VICTORY_GATE 60
 
-void gotoxy(double x, double y); 
-void DrawWhiteSpace(int a_x, int a_y, int b_x, int b_y); 
-void Initialize(); 
-void ChooseGameMode(); 
+void gotoxy(double x, double y);
+void DrawWhiteSpace(int a_x, int a_y, int b_x, int b_y);
+void Initialize();
+void ChooseGameMode();
 bool StartGame();
-bool Collision(double x1, double y1, double x2, double y2); 
-void UpdateInfoBar(int gameScore, std::chrono::seconds leftTime); 
-bool PlayAgainOrNot(); 
-void WelcomeMessage(); 
+bool Collision(double x1, double y1, double x2, double y2);
+void UpdateInfoBar(int gameScore, std::chrono::seconds leftTime);
+bool PlayAgainOrNot();
+void WelcomeMessage();
 void GuideMessage();
 void GameModeMessage();
 void VictoryMessage();
@@ -57,20 +57,20 @@ void DefeatMessage();
 void PlayAgainMessage();
 void GoodbyeMessage();
 
-int HISTORY_HIGH_SCORE = 0; 
+int HISTORY_HIGH_SCORE = 0;
 
 
 int main()
 {
-    Initialize(); 
+    Initialize();
 
     WelcomeMessage();
-    
 
-    if (cin)
+
+    if (guideKey == 'r' || guideKey == 'R')
     {
         GuideMessage();
-        _getch(); 
+        _getch();
     }
 
     bool playAgain = true;
@@ -85,13 +85,13 @@ int main()
         if (gameVictory)
         {
             VictoryMessage();
-            Sleep(SHOW_MSG_LONG); 
+            Sleep(SHOW_MSG_LONG);
         }
 
         else
         {
             DefeatMessage();
-            Sleep(SHOW_MSG_LONG);    
+            Sleep(SHOW_MSG_LONG);
         }
 
         playAgain = PlayAgainOrNot();
@@ -104,16 +104,16 @@ int main()
     return 0;
 }
 
-void gotoxy(double x, double y) 
-{   
+void gotoxy(double x, double y)
+{
     HANDLE hCon = GetStdHandle(STD_OUTPUT_HANDLE);
     COORD dwPos;
-    dwPos.X = x; 
-    dwPos.Y = y; 
+    dwPos.X = x;
+    dwPos.Y = y;
     SetConsoleCursorPosition(hCon, dwPos);
 }
 
-void DrawWhiteSpace(int ex1, int ey1, int ex2, int ey2) 
+void DrawWhiteSpace(int ex1, int ey1, int ex2, int ey2)
 {
     for (int i = ex1; i <= ex2; i++)
     {
@@ -125,13 +125,13 @@ void DrawWhiteSpace(int ex1, int ey1, int ex2, int ey2)
     }
 }
 
-void Initialize() 
+void Initialize()
 {
-   
+
     LPCWSTR a = L"我操你媽";
     SetConsoleTitle(a);
 
-    
+
     HANDLE hCon = GetStdHandle(STD_OUTPUT_HANDLE);
     CONSOLE_CURSOR_INFO cci;
     cci.dwSize = 1;
@@ -146,7 +146,7 @@ void ChooseGameMode()
     char gameModeKey = '0';
     bool VaildKeyForGameMode = false;
 
-    while (!VaildKeyForGameMode) 
+    while (!VaildKeyForGameMode)
     {
         gameModeKey = _getch();
 
@@ -158,12 +158,12 @@ void ChooseGameMode()
 
     if (gameModeKey == 'e' || gameModeKey == 'E')
     {
-        Enemy::setGameMode(1);                  
+        Enemy::setGameMode(1);
     }
 
     else
     {
-        Enemy::setGameMode(0);            
+        Enemy::setGameMode(0);
     }
 }
 
@@ -171,27 +171,27 @@ bool StartGame()
 {
     DrawWhiteSpace(0, 0, BORDER_RIGHT_WIDE, BORDER_DOWN);
 
-    std::chrono::seconds timeLimit(TIME_LIMIT); 
-    std::chrono::seconds duration(0); 
-    std::chrono::seconds leftTime(TIME_LIMIT); 
-    auto start = chrono::steady_clock::now(); 
-    int Score = 0; 
+    std::chrono::seconds timeLimit(TIME_LIMIT);
+    std::chrono::seconds duration(0);
+    std::chrono::seconds leftTime(TIME_LIMIT);
+    auto start = chrono::steady_clock::now();
+    int Score = 0;
 
-    Player std = Player(STUDENT_INITIAL_X, STUDENT_INITIAL_Y); 
+    Player std = Player(STUDENT_INITIAL_X, STUDENT_INITIAL_Y);
     list<Enemy> enemys;
-    list<Enemy>::iterator e; 
+    list<Enemy>::iterator e;
     list<Attack> attacks;
-    list<Attack>::iterator a; 
+    list<Attack>::iterator a;
 
-    srand(time(nullptr)); 
-    int worldWidth = BORDER_RIGHT - BORDER_LEFT + 1; 
-    int worldLength = BORDER_DOWN - BORDER_UP + 1; 
+    srand(time(nullptr));
+    int worldWidth = BORDER_RIGHT - BORDER_LEFT + 1;
+    int worldLength = BORDER_DOWN - BORDER_UP + 1;
     double nX = 0;
     double nY = 0;
-    for (int i = 0; i < SCORE59_CNT; i++) 
+    for (int i = 0; i < SCORE59_CNT; i++)
     {
         nX = (rand() % worldWidth) + BORDER_LEFT;
-        nY = (rand() % (worldLength / 2)) + (BORDER_UP); 
+        nY = (rand() % (worldLength / 2)) + (BORDER_UP);
         enemys.push_back(Enemy(nX, nY));
     }
 
@@ -258,7 +258,7 @@ bool StartGame()
         if (_kbhit())
         {
             char key = _getch();
-            if (key == ' ') 
+            if (key == ' ')
             {
                 attacks.push_back(Attack(std.X(), std.Y() - 1));
             }
@@ -327,4 +327,87 @@ bool PlayAgainOrNot()
         return false;
     else
         return true;
+}
+
+void WelcomeMessage()
+{
+    DrawWhiteSpace(0, 0, BORDER_RIGHT_WIDE, BORDER_DOWN);
+    int x = 20;
+    int y = 10;
+    gotoxy(x, y + 3); cout << " 上 下 左 右 進 行 移 動 ";
+    gotoxy(31, y + 12); cout << "按R開始遊戲 或是任意鍵開始";
+}
+
+void GuideMessage()
+{
+    DrawWhiteSpace(0, 0, BORDER_RIGHT_WIDE, BORDER_DOWN);
+    int x = 44;
+    int y = 2;
+    gotoxy(x, y); cout << " 遊戲指引  |  Game Guide ";
+    y = 5;
+    gotoxy(50, y); cout << "    前言    ";
+    x = 35;
+    gotoxy(x, y + 2); cout << "蘿莉控是一名勇者，正在面臨著沒有蘿莉的困擾。";
+    gotoxy(x, y + 4); cout << "因為蘿莉們都被大魔王給帶走了。   ";
+    gotoxy(x, y + 6); cout << "因此踏上打倒大魔王的旅程。   ";
+    gotoxy(x, y + 8); cout << "讓我們一起幫助蘿莉控，然後大家一起為成為紳士努力吧 ! ";
+    gotoxy(48, y + 10); cout << "    遊戲玩法    ";
+    gotoxy(x, y + 12); cout << "你是勇者，面臨著大量敵人，你需要進行攻擊，將敵人擊敗";
+    gotoxy(x, y + 14); cout << "發射方式 : 按下鍵盤的空白鍵    移動方式 : 按下鍵盤的方向鍵 ";
+    gotoxy(x, y + 16); cout << "計分方式 : 每消滅一個敵人即得" << GET_GAME_POINT << "分，若被敵人打到，倒扣" << LOSE_GAME_POINT << "分";
+    gotoxy(x, y + 18); cout << "遊戲時間共" << TIME_LIMIT << "秒，在時間內打到" << VICTORY_GATE << "分即可通關。";
+    gotoxy(x, y + 20); cout << "按下任意鍵開始遊戲";
+}
+
+void GameModeMessage()
+{
+    DrawWhiteSpace(0, 0, BORDER_RIGHT_WIDE, BORDER_DOWN);
+    int x = 40;
+    int y = 10;
+    gotoxy(x, y + 1); cout << " 請選擇遊戲難度:";
+    gotoxy(x, y + 3); cout << " 簡單：按 E";
+    gotoxy(x, y + 5); cout << " 困難：按 H";
+}
+
+void VictoryMessage()
+{
+    DrawWhiteSpace(BORDER_LEFT_WIDE, BORDER_UP, BORDER_RIGHT_WIDE, BORDER_DOWN);
+    int x = 25;
+    int y = 10;
+
+    gotoxy(x, y + 3); cout << " 恭喜你離救出蘿莉越來越接近了 ";
+
+    gotoxy(x, y + 8); cout << " 請期待下部作品 ";
+}
+
+void DefeatMessage()
+{
+    DrawWhiteSpace(BORDER_LEFT_WIDE, BORDER_UP, BORDER_RIGHT_WIDE, BORDER_DOWN);
+    int x = 25;
+    int y = 10;
+
+    gotoxy(x, y + 3); cout << " 你失敗了 快點再次出發 ";
+
+    gotoxy(x, y + 8); cout << " 就你這速度 蘿莉都長大了 ";
+}
+
+void PlayAgainMessage()
+{
+    DrawWhiteSpace(0, 0, BORDER_RIGHT, BORDER_DOWN);
+    int x = 10;
+    int y = 10;
+
+    gotoxy(x, y + 3); cout << " 再玩一次請按 Y 結束請按 N ";
+
+}
+
+void GoodbyeMessage()
+{
+    DrawWhiteSpace(0, 0, BORDER_RIGHT_WIDE, BORDER_DOWN);
+    int x = 15;
+    int y = 10;
+
+    gotoxy(x, y + 3); cout << " 感謝你的遊玩 ";
+
+    gotoxy(x, y + 6); cout << " Thanks for playing!";
 }

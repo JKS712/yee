@@ -335,7 +335,7 @@ void WelcomeMessage()
     int x = 20;
     int y = 10;
     gotoxy(x, y + 3); cout << " 上 下 左 右 進 行 移 動 ";
-    gotoxy(31, y + 12); cout << "按R開始遊戲 或是任意鍵開始";
+    gotoxy(31, y + 12); cout << "按R/r觀看遊戲指引 或是按任意鍵開始";
 }
 
 void GuideMessage()

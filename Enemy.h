@@ -12,8 +12,8 @@ public:
     bool EnemyisOut();
     static void setGameMode(bool level);
 private:
-    double x; // x coordinate
-    double y; // y coordinate 
+    double x;
+    double y;
     static bool gameMode;
 };
 

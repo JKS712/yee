@@ -76,4 +76,5 @@ void Player::Move()
                 } 
         }
     }
+    Draw();
 }

@@ -6,6 +6,10 @@
 #include <list>
 #include <conio.h> 
 #include <windows.h> 
+
+#include "Attack.h"
+#include "Enemy.h"
+#include "Player.h"
 using namespace std;
 
 #define KEY_UP    72 
@@ -28,81 +32,26 @@ using namespace std;
 #define HIS_SCORE_POS_Y 0 
 #define TIME_POS_X 20 
 #define TIME_POS_Y 0 
-#define SPEED_STUDENT 1.1 
-#define SPEED_SCORE59_EASY 0.1
-#define SPEED_SCORE59_HARD 0.5 
-#define SPEED_PASS 0.5  
+#define SPEED_PLAYER 1.1 
+#define SPEED_ENEMY_EASY 0.1
+#define SPEED_ENEMY_HARD 0.5 
+#define SPEED_ATTACK 0.5  
 #define TIME_LIMIT 30 
 #define INTERVAL_BETWEEN_EACH_LOOP 20 
 #define SHOW_MSG_SHORT 100 
 #define SHOW_MSG_LONG 1500
-#define SCORE59_CNT 10 
+#define ENEMY_CNT 10 
 #define GET_GAME_POINT 2
 #define LOSE_GAME_POINT 5
 #define VICTORY_GATE 60
 
-void gotoxy(double x, double y);
-void DrawWhiteSpace(int a_x, int a_y, int b_x, int b_y);
-void Initialize();
-void ChooseGameMode();
-bool StartGame();
-bool Collision(double x1, double y1, double x2, double y2);
-void UpdateInfoBar(int gameScore, std::chrono::seconds leftTime);
-bool PlayAgainOrNot();
-void WelcomeMessage();
-void GuideMessage();
-void GameModeMessage();
-void VictoryMessage();
-void DefeatMessage();
-void PlayAgainMessage();
-void GoodbyeMessage();
-
 int HISTORY_HIGH_SCORE = 0;
 
-
-int main()
-{
-    Initialize();
-
-    WelcomeMessage();
-
-
-    if (guideKey == 'r' || guideKey == 'R')
-    {
-        GuideMessage();
-        _getch();
-    }
-
-    bool playAgain = true;
-
-    while (playAgain)
-    {
-        ChooseGameMode();
-
-        bool gameVictory = true;
-        gameVictory = StartGame();
-
-        if (gameVictory)
-        {
-            VictoryMessage();
-            Sleep(SHOW_MSG_LONG);
-        }
-
-        else
-        {
-            DefeatMessage();
-            Sleep(SHOW_MSG_LONG);
-        }
-
-        playAgain = PlayAgainOrNot();
-    }
-
-    GoodbyeMessage();
-    Sleep(SHOW_MSG_LONG);
-    DrawWhiteSpace(0, 0, BORDER_RIGHT_WIDE, BORDER_DOWN);
-
-    return 0;
-}
+void gotoxy(double x, double y);
+void DrawWhiteSpace(int ex1, int ey1, int ex2, int ey2);
+bool Collision(double x1, double y1, double x2, double y2);
+void UpdateInfoBar(int Score, std::chrono::seconds leftTime);
+void GameModeMessage();
 
 void gotoxy(double x, double y)
 {
@@ -128,7 +77,7 @@ void DrawWhiteSpace(int ex1, int ey1, int ex2, int ey2)
 void Initialize()
 {
 
-    LPCWSTR a = L"我操你媽";
+    LPCWSTR a = L"打工吧 魔王大人";
     SetConsoleTitle(a);
 
 
@@ -188,7 +137,7 @@ bool StartGame()
     int worldLength = BORDER_DOWN - BORDER_UP + 1;
     double nX = 0;
     double nY = 0;
-    for (int i = 0; i < SCORE59_CNT; i++)
+    for (int i = 0; i < ENEMY_CNT; i++)
     {
         nX = (rand() % worldWidth) + BORDER_LEFT;
         nY = (rand() % (worldLength / 2)) + (BORDER_UP);
@@ -197,22 +146,22 @@ bool StartGame()
 
     while (duration < timeLimit)
     {
-        for (a = attacks.begin(); a != attacks.end(); a++)
+        for (a = attacks.begin(); a != attacks.end(); ++a)
         {
-            a->Move();
-            if (a->isOut())
+            a->AttackMove();
+            if (a->AttackisOut())
             {
-                a->Erase();
+                a->AttackErase();
                 a = attacks.erase(a);
             }
         }
 
-        for (e = enemys.begin(); e != enemys.end(); e++)
+        for (e = enemys.begin(); e != enemys.end(); ++e)
         {
-            e->Move();
-            if (e->isOut())
+            e->EnemyMove();
+            if (e->EnemyisOut())
             {
-                e->Erase();
+                e->EnemyErase();
                 e = enemys.erase(e);
 
                 nX = (rand() % worldWidth) + BORDER_LEFT;
@@ -220,16 +169,16 @@ bool StartGame()
             }
         }
 
-        for (e = enemys.begin(); e != enemys.end(); e++)
+        for (e = enemys.begin(); e != enemys.end(); ++e)
         {
 
-            for (a = attacks.begin(); a != attacks.end(); a++)
+            for (a = attacks.begin(); a != attacks.end(); ++a)
             {
-                if (Collision(a->X(), a->Y(), a->X(), a->Y()))
+                if (Collision(a->X(), a->Y(), e->X(), e->Y()))
                 {
                     Score += GET_GAME_POINT;
-                    a->Erase();
-                    e->Erase();
+                    a->AttackErase();
+                    e->EnemyErase();
                     a = attacks.erase(a);
                     e = enemys.erase(e);
 
@@ -239,14 +188,14 @@ bool StartGame()
             }
         }
 
-        for (e = enemys.begin(); e != enemys.end(); e++)
+        for (e = enemys.begin(); e != enemys.end(); ++e)
         {
 
             if (Collision(e->X(), e->Y(), std.X(), std.Y()))
             {
                 Score -= LOSE_GAME_POINT;
-                std.Erase();
-                e->Erase();
+                std.PlayerErase();
+                e->EnemyErase();
                 Sleep(SHOW_MSG_SHORT);
                 e = enemys.erase(e);
 
@@ -264,7 +213,7 @@ bool StartGame()
             }
         }
 
-        std.Move();
+        std.PlayerMove();
 
         auto t1 = chrono::steady_clock::now();
         duration = std::chrono::duration_cast<std::chrono::seconds>(t1 - start);
@@ -306,36 +255,13 @@ void UpdateInfoBar(int Score, std::chrono::seconds leftTime)
     }
 }
 
-bool PlayAgainOrNot()
-{
-    PlayAgainMessage();
-
-    char playAgainKey = '0';
-    bool VaildKeyForPlayAgain = false;
-
-    while (!VaildKeyForPlayAgain)
-    {
-        playAgainKey = _getch();
-
-        if (playAgainKey == 'y' || playAgainKey == 'Y' || playAgainKey == 'n' || playAgainKey == 'N')
-        {
-            VaildKeyForPlayAgain = true;
-        }
-    }
-
-    if (playAgainKey == 'n' || playAgainKey == 'N')
-        return false;
-    else
-        return true;
-}
-
 void WelcomeMessage()
 {
     DrawWhiteSpace(0, 0, BORDER_RIGHT_WIDE, BORDER_DOWN);
     int x = 20;
     int y = 10;
     gotoxy(x, y + 3); cout << " 上 下 左 右 進 行 移 動 ";
-    gotoxy(31, y + 12); cout << "按R/r觀看遊戲指引 或是按任意鍵開始";
+    gotoxy(31, y + 12); cout << "按R觀看遊戲引導 或是任意鍵開始";
 }
 
 void GuideMessage()
@@ -410,4 +336,71 @@ void GoodbyeMessage()
     gotoxy(x, y + 3); cout << " 感謝你的遊玩 ";
 
     gotoxy(x, y + 6); cout << " Thanks for playing!";
+}
+
+bool PlayAgainOrNot()
+{
+    PlayAgainMessage();
+
+    char playAgainKey = '0';
+    bool VaildKeyForPlayAgain = false;
+
+    while (!VaildKeyForPlayAgain)
+    {
+        playAgainKey = _getch();
+
+        if (playAgainKey == 'y' || playAgainKey == 'Y' || playAgainKey == 'n' || playAgainKey == 'N')
+        {
+            VaildKeyForPlayAgain = true;
+        }
+    }
+
+    if (playAgainKey == 'n' || playAgainKey == 'N')
+        return false;
+    else
+        return true;
+}
+
+int main()
+{
+    Initialize();
+
+    WelcomeMessage();
+    char guideKey = _getch();
+
+    if (guideKey == 'r' || guideKey == 'R')
+    {
+        GuideMessage();
+        _getch();
+    }
+
+    bool playAgain = true;
+
+    while (playAgain)
+    {
+        ChooseGameMode();
+
+        bool gameVictory = true;
+        gameVictory = StartGame();
+
+        if (gameVictory)
+        {
+            VictoryMessage();
+            Sleep(SHOW_MSG_LONG);
+        }
+
+        else
+        {
+            DefeatMessage();
+            Sleep(SHOW_MSG_LONG);
+        }
+
+        playAgain = PlayAgainOrNot();
+    }
+
+    GoodbyeMessage();
+    Sleep(SHOW_MSG_LONG);
+    DrawWhiteSpace(0, 0, BORDER_RIGHT_WIDE, BORDER_DOWN);
+
+    return 0;
 }

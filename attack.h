@@ -1,21 +1,18 @@
 #ifndef ATTACK_H
 #define ATTACK_H
-
-class attack{
+class Attack
+{
 public:
-	arrack(int);
-	int getSize();
-	void setSize(int,int);
-	int getDamage();
-	void setDamage(int);
-	int getAttackSpeed();
-	void setAttackSpeed(int);
-	void printAttack();
-	void eraseAttack();
+    Attack(double x, double y);
+    double X();
+    double Y();
+    void AttackDraw();
+    void AttackErase();
+    void AttackMove();
+    bool AttackisOut();
 private:
-	int Damage;
-	double x;
-	double y;
+    int x;
+    int y; 
 };
-
 #endif
+

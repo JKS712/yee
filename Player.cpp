@@ -1,14 +1,19 @@
-#include "Player.h"
-#include <conio.h>
-#define KEY_UP    72
+#include"Player.h"
+#include<iostream>
+#include<conio.h>
+#include<windows.h>
+#define KEY_UP    72 
 #define KEY_DOWN  80
 #define KEY_LEFT  75
 #define KEY_RIGHT 77
-#define BORDER_UP 2
+#define BORDER_UP 2 
 #define BORDER_DOWN 28
-#define BORDER_LEFT 43 
-#define BORDER_RIGHT 73
+#define BORDER_LEFT 43  
+#define BORDER_LEFT_WIDE 2  
+#define BORDER_RIGHT 73 
+#define BORDER_RIGHT_WIDE 115 
 #define SPEED_PLAYER 1.1
+using namespace std;
 
 Player::Player(double x, double y)
 {
@@ -23,58 +28,58 @@ double Player::Y()
 {
     return y;
 }
-void Player::Draw()
+void Player::PlayerDraw()
 {
-    gotoxy(x, y); 
+    gotoxy(x, y);
     cout << "凸";
 }
-void Player::Erase()
+void Player::PlayerErase()
 {
     gotoxy(x, y);
     cout << "  ";
 }
-void Player::printAttack() {
-    gotoxy(x, y); cout << "KKK";
-    gotoxy(x, y + 1); cout << " K ";
-}
-void Player::eraseAttack() {
-    gotoxy(x, y); cout << "  ";
-    gotoxy(x, y + 1); cout << "  ";
-}
-void Player::Move()
+void Player::PlayerMove()
 {
-    if(kbhit())
+    if (kbhit())
     {
-        Erase();
-        
+        PlayerErase();
+
         char key = getch();
-        switch(key)
+        switch (key)
         {
-            case KEY_LEFT: 
-                if(x - SPEED_PLAYER > BORDER_LEFT)
-                { 
-                    x -= SPEED_PLAYER; 
-                    break; 
-                }
-            case KEY_RIGHT: 
-                if (x + SPEED_PLAYER < BORDER_RIGHT) 
-                {
-                    x += SPEED_PLAYER; 
-                    break; 
-                }
-            case KEY_UP: 
-                if (y - SPEED_PLAYER > BORDER_UP) 
-                { 
-                    y -= SPEED_PLAYER; 
-                    break;
-                }
-            case KEY_DOWN: 
-                if (y + SPEED_PLAYER < BORDER_DOWN) 
-                { 
-                    y += SPEED_PLAYER; 
-                    break; 
-                } 
+        case KEY_LEFT:
+            if (x - SPEED_PLAYER > BORDER_LEFT)
+            {
+                x -= SPEED_PLAYER;
+                break;
+            }
+        case KEY_RIGHT:
+            if (x + SPEED_PLAYER < BORDER_RIGHT)
+            {
+                x += SPEED_PLAYER;
+                break;
+            }
+        case KEY_UP:
+            if (y - SPEED_PLAYER > BORDER_UP)
+            {
+                y -= SPEED_PLAYER;
+                break;
+            }
+        case KEY_DOWN:
+            if (y + SPEED_PLAYER < BORDER_DOWN)
+            {
+                y += SPEED_PLAYER;
+                break;
+            }
         }
     }
-    Draw();
+    PlayerDraw();
+}
+void gotoxy(double x, double y) 
+{   
+    HANDLE hCon = GetStdHandle(STD_OUTPUT_HANDLE);
+    COORD dwPos;
+    dwPos.X = x; // start from 0
+    dwPos.Y = y; // start from 0
+    SetConsoleCursorPosition(hCon, dwPos);
 }

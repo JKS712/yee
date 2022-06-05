@@ -1,17 +1,20 @@
-#ifndef ENEMY
-#define ENEMY
-
+#ifndef ENEMY_H
+#define ENEMY_H
 class Enemy
 {
 public:
-  Enemy(double x,double y);
-  double getX();
-  double getY();
-  void Draw(); 
-  void Erase(); 
-  void Move(); 
-  bool isOut();
+    Enemy(double x, double y);
+    double X();
+    double Y();
+    void EnemyDraw();
+    void EnemyErase();
+    void EnemyMove();
+    bool EnemyisOut();
+    static void setGameMode(bool level);
 private:
-  double x;
-  double y;
+    double x; // x coordinate
+    double y; // y coordinate 
+    static bool gameMode;
 };
+
+#endif

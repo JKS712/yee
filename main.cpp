@@ -6,10 +6,12 @@
 #include <list>
 #include <conio.h> 
 #include <windows.h> 
+#include <vector>
 
 #include "Attack.h"
 #include "Enemy.h"
 #include "Player.h"
+
 using namespace std;
 
 #define KEY_UP    72 
@@ -22,23 +24,24 @@ using namespace std;
 #define BORDER_LEFT_WIDE 2  
 #define BORDER_RIGHT 73 
 #define BORDER_RIGHT_WIDE 115 
-#define STUDENT_INITIAL_X 58.5 
-#define STUDENT_INITIAL_Y 25
-#define EQUALITY_GAP_X 1.5 
+#define PLAYER_INITIAL_X 58.5 
+#define PLAYER_INITIAL_Y 25
+#define EQUALITY_GAP_X 1.5
 #define EQUALITY_GAP_Y 1
 #define CUR_SCORE_POS_X 50 
 #define CUR_SCORE_POS_Y 0  
-#define HIS_SCORE_POS_X 80
-#define HIS_SCORE_POS_Y 0 
+#define GAMEMODE_POS_X 80
+#define GAMEMODE_POS_Y 0 
 #define TIME_POS_X 20 
 #define TIME_POS_Y 0 
 #define SPEED_PLAYER 1.1 
 #define SPEED_ENEMY_EASY 0.1
 #define SPEED_ENEMY_HARD 0.5 
+#define SPEED_SUPER_HARD 0.9
 #define SPEED_ATTACK 0.5  
 #define TIME_LIMIT 30 
 #define INTERVAL_BETWEEN_EACH_LOOP 20 
-#define SHOW_MSG_SHORT 100 
+#define SHOW_MSG_SHORT 200 
 #define SHOW_MSG_LONG 1500
 #define ENEMY_CNT 10 
 #define GET_GAME_POINT 2
@@ -77,7 +80,7 @@ void DrawWhiteSpace(int ex1, int ey1, int ex2, int ey2)
 void Initialize()
 {
 
-    LPCWSTR a = L"ÊâìÂ∑•Âêß È≠îÁéãÂ§ß‰∫∫";
+    LPCWSTR a = L"ß⁄µ¥πÔ§£∑|ª°¶≥±m≥J";
     SetConsoleTitle(a);
 
 
@@ -92,28 +95,32 @@ void ChooseGameMode()
 {
     GameModeMessage();
 
-    char gameModeKey = '0';
-    bool VaildKeyForGameMode = false;
+    char gameModeKey = 'g';
+    int VaildKeyForGameMode = 0;
 
     while (!VaildKeyForGameMode)
     {
         gameModeKey = _getch();
 
-        if (gameModeKey == 'e' || gameModeKey == 'E' || gameModeKey == 'h' || gameModeKey == 'H')
+        if (gameModeKey == 'e' || gameModeKey == 'E' || gameModeKey == 'h' || gameModeKey == 'H' || gameModeKey == 'g' || gameModeKey == 'G' )
         {
-            VaildKeyForGameMode = true;
+            VaildKeyForGameMode = 1;
         }
     }
-
-    if (gameModeKey == 'e' || gameModeKey == 'E')
+    if (gameModeKey == 'g' || gameModeKey == 'G')
+    {
+        Enemy::setGameMode(2);
+    }
+    else if (gameModeKey == 'e' || gameModeKey == 'E')
     {
         Enemy::setGameMode(1);
     }
-
-    else
+    else 
     {
         Enemy::setGameMode(0);
     }
+    
+
 }
 
 bool StartGame()
@@ -124,20 +131,20 @@ bool StartGame()
     std::chrono::seconds duration(0);
     std::chrono::seconds leftTime(TIME_LIMIT);
     auto start = chrono::steady_clock::now();
-    int Score = 0;
+    int Score = 100;
 
-    Player std = Player(STUDENT_INITIAL_X, STUDENT_INITIAL_Y);
-    list<Enemy> enemys;
-    list<Enemy>::iterator e;
-    list<Attack> attacks;
-    list<Attack>::iterator a;
+    Player player = Player(PLAYER_INITIAL_X, PLAYER_INITIAL_Y);
+    vector<Enemy> enemys;
+    vector<Enemy>::iterator e;
+    vector<Attack> attacks;
+    vector<Attack>::iterator a;
 
     srand(time(nullptr));
     int worldWidth = BORDER_RIGHT - BORDER_LEFT + 1;
     int worldLength = BORDER_DOWN - BORDER_UP + 1;
     double nX = 0;
     double nY = 0;
-    for (int i = 0; i < ENEMY_CNT; i++)
+    for (int i = 0; i < ENEMY_CNT ; i++)
     {
         nX = (rand() % worldWidth) + BORDER_LEFT;
         nY = (rand() % (worldLength / 2)) + (BORDER_UP);
@@ -146,7 +153,7 @@ bool StartGame()
 
     while (duration < timeLimit)
     {
-        for (a = attacks.begin(); a != attacks.end(); ++a)
+        for (a = attacks.begin(); a != attacks.end(); a++)
         {
             a->AttackMove();
             if (a->AttackisOut())
@@ -156,7 +163,7 @@ bool StartGame()
             }
         }
 
-        for (e = enemys.begin(); e != enemys.end(); ++e)
+        for (e = enemys.begin(); e != enemys.end(); e++)
         {
             e->EnemyMove();
             if (e->EnemyisOut())
@@ -169,10 +176,13 @@ bool StartGame()
             }
         }
 
-        for (e = enemys.begin(); e != enemys.end(); ++e)
-        {
+        if (Score <= 0)
+            break;
 
-            for (a = attacks.begin(); a != attacks.end(); ++a)
+        /*
+        for (e = enemys.begin(); e != enemys.end(); e++)
+        {
+            for (a = attacks.begin(); a != attacks.end(); a++)
             {
                 if (Collision(a->X(), a->Y(), e->X(), e->Y()))
                 {
@@ -187,14 +197,14 @@ bool StartGame()
                 }
             }
         }
-
-        for (e = enemys.begin(); e != enemys.end(); ++e)
+        */
+        for (e = enemys.begin(); e != enemys.end(); e++)
         {
 
-            if (Collision(e->X(), e->Y(), std.X(), std.Y()))
+            if (Collision(e->X(), e->Y(), player.X(), player.Y()))
             {
                 Score -= LOSE_GAME_POINT;
-                std.PlayerErase();
+                player.PlayerErase();
                 e->EnemyErase();
                 Sleep(SHOW_MSG_SHORT);
                 e = enemys.erase(e);
@@ -203,17 +213,17 @@ bool StartGame()
                 enemys.push_back(Enemy(nX, BORDER_UP));
             }
         }
-
+        /*
         if (_kbhit())
         {
             char key = _getch();
             if (key == ' ')
             {
-                attacks.push_back(Attack(std.X(), std.Y() - 1));
+                attacks.push_back(Attack(player.X(), player.Y() - 1));
             }
         }
-
-        std.PlayerMove();
+        */
+        player.PlayerMove();
 
         auto t1 = chrono::steady_clock::now();
         duration = std::chrono::duration_cast<std::chrono::seconds>(t1 - start);
@@ -245,14 +255,12 @@ bool Collision(double x1, double y1, double x2, double y2)
 
 void UpdateInfoBar(int Score, std::chrono::seconds leftTime)
 {
-    gotoxy(TIME_POS_X, TIME_POS_Y); cout << "Ââ©È§òÊôÇÈñì: " << leftTime.count() << "   ";
-    gotoxy(CUR_SCORE_POS_X, CUR_SCORE_POS_Y); cout << "ÂàÜÊï∏: " << Score << "  ";
-    gotoxy(HIS_SCORE_POS_X, HIS_SCORE_POS_Y); cout << "Ê≠∑Âè≤È´òÂàÜ: " << HISTORY_HIGH_SCORE;
-    if (Score >= HISTORY_HIGH_SCORE)
-    {
-        HISTORY_HIGH_SCORE = Score;
-        gotoxy(HIS_SCORE_POS_X, HIS_SCORE_POS_Y); cout << "Ê≠∑Âè≤È´òÂàÜ: " << HISTORY_HIGH_SCORE;
-    }
+    gotoxy(TIME_POS_X, TIME_POS_Y); cout << "≥—ælÆ…∂°: " << leftTime.count() << "   ";
+    gotoxy(CUR_SCORE_POS_X, CUR_SCORE_POS_Y); cout << "¶Â∂q: " << Score << "  ";
+    gotoxy(GAMEMODE_POS_X, GAMEMODE_POS_Y); cout << "πC¿∏√¯´◊: ";
+    if (Enemy::getGameMode() == 2) cout << "≈‹∫A";
+    else if (Enemy::getGameMode() == 1) cout << "¬≤≥Ê";
+    else cout << "ßx√¯";
 }
 
 void WelcomeMessage()
@@ -260,29 +268,29 @@ void WelcomeMessage()
     DrawWhiteSpace(0, 0, BORDER_RIGHT_WIDE, BORDER_DOWN);
     int x = 20;
     int y = 10;
-    gotoxy(x, y + 3); cout << " ‰∏ä ‰∏ã Â∑¶ Âè≥ ÈÄ≤ Ë°å Áßª Âãï ";
-    gotoxy(31, y + 12); cout << "ÊåâRËßÄÁúãÈÅäÊà≤ÂºïÂ∞é ÊàñÊòØ‰ªªÊÑèÈçµÈñãÂßã";
+    gotoxy(x, y + 3); cout << "∂WØ≈æ‘ƒ•¨Ô∂V¶t©z≠∏¶Ê∏˙¡◊§p¶Ê¨P¨@±œ≈⁄≤˙§jß@æ‘!  ";
+    gotoxy(x, y + 12); cout << "´ˆR∆[¨›πC¿∏§ﬁæ… ©Œ¨O•Ù∑N¡‰∂}©l";
 }
 
 void GuideMessage()
 {
     DrawWhiteSpace(0, 0, BORDER_RIGHT_WIDE, BORDER_DOWN);
-    int x = 44;
+    int x = 50;
     int y = 2;
-    gotoxy(x, y); cout << " ÈÅäÊà≤ÊåáÂºï  |  Game Guide ";
+    gotoxy(x, y); cout << "  πC¿∏´¸§ﬁ  ";
     y = 5;
-    gotoxy(50, y); cout << "    ÂâçË®Ä    ";
+    gotoxy(50, y); cout << "    ´e®•    ";
     x = 35;
-    gotoxy(x, y + 2); cout << "ËòøËéâÊéßÊòØ‰∏ÄÂêçÂãáËÄÖÔºåÊ≠£Âú®Èù¢Ëá®ËëóÊ≤íÊúâËòøËéâÁöÑÂõ∞Êìæ„ÄÇ";
-    gotoxy(x, y + 4); cout << "Âõ†ÁÇ∫ËòøËéâÂÄëÈÉΩË¢´Â§ßÈ≠îÁéãÁµ¶Â∏∂Ëµ∞‰∫Ü„ÄÇ   ";
-    gotoxy(x, y + 6); cout << "Âõ†Ê≠§Ë∏è‰∏äÊâìÂÄíÂ§ßÈ≠îÁéãÁöÑÊóÖÁ®ã„ÄÇ   ";
-    gotoxy(x, y + 8); cout << "ËÆìÊàëÂÄë‰∏ÄËµ∑Âπ´Âä©ËòøËéâÊéßÔºåÁÑ∂ÂæåÂ§ßÂÆ∂‰∏ÄËµ∑ÁÇ∫ÊàêÁÇ∫Á¥≥Â£´Âä™ÂäõÂêß ! ";
-    gotoxy(48, y + 10); cout << "    ÈÅäÊà≤Áé©Ê≥ï    ";
-    gotoxy(x, y + 12); cout << "‰Ω†ÊòØÂãáËÄÖÔºåÈù¢Ëá®ËëóÂ§ßÈáèÊïµ‰∫∫Ôºå‰Ω†ÈúÄË¶ÅÈÄ≤Ë°åÊîªÊìäÔºåÂ∞áÊïµ‰∫∫ÊìäÊïó";
-    gotoxy(x, y + 14); cout << "ÁôºÂ∞ÑÊñπÂºè : Êåâ‰∏ãÈçµÁõ§ÁöÑÁ©∫ÁôΩÈçµ    ÁßªÂãïÊñπÂºè : Êåâ‰∏ãÈçµÁõ§ÁöÑÊñπÂêëÈçµ ";
-    gotoxy(x, y + 16); cout << "Ë®àÂàÜÊñπÂºè : ÊØèÊ∂àÊªÖ‰∏ÄÂÄãÊïµ‰∫∫Âç≥Âæó" << GET_GAME_POINT << "ÂàÜÔºåËã•Ë¢´Êïµ‰∫∫ÊâìÂà∞ÔºåÂÄíÊâ£" << LOSE_GAME_POINT << "ÂàÜ";
-    gotoxy(x, y + 18); cout << "ÈÅäÊà≤ÊôÇÈñìÂÖ±" << TIME_LIMIT << "ÁßíÔºåÂú®ÊôÇÈñìÂÖßÊâìÂà∞" << VICTORY_GATE << "ÂàÜÂç≥ÂèØÈÄöÈóú„ÄÇ";
-    gotoxy(x, y + 20); cout << "Êåâ‰∏ã‰ªªÊÑèÈçµÈñãÂßãÈÅäÊà≤";
+    gotoxy(x, y + 2); cout << "≈⁄≤˙±±¨O§@¶W´i™Ã°A•ø¶b≠±¡{µ€®S¶≥≈⁄≤˙™∫ßx¬Z°C";
+    gotoxy(x, y + 4); cout << "¶]¨∞≈⁄≤˙≠Ã≥£≥Q§j≈]§˝µπ±a®´§F°C ΩÒ§W•¥≠À§j≈]§˝™∫Æ»µ{  ";
+    gotoxy(x, y + 6); cout << "¶˝¨O•L™∫™Zæπ√a§F®SøÏ™k®œ•Œ°A≤{¶b≠n®Ï•t§@≠”¨P®t∂R™Zæπ   ";
+    gotoxy(x, y + 8); cout << "≈˝ß⁄≠Ã§@∞_¿∞ßU≈⁄≤˙±±°AµM´·§jÆa§@∞_¨∞¶®¨∞≤‘§hßV§Oßa ! ";
+    gotoxy(48, y + 10); cout << "    πC¿∏™±™k    ";
+    gotoxy(x, y + 12); cout << "ßA¨O´i™Ã°AßA≤{¶bª›≠n¨Ô∂V§p¶Ê¨P±a°A¶bª∑≥B™∫≈]§˝•¥≠À";
+    gotoxy(x, y + 14); cout << "´ˆ§U¡‰ΩL™∫§Ë¶V°Aæﬁ±±ßA™∫æ‘ƒ• ";
+    gotoxy(x, y + 16); cout << "≠Y≥Q§p¶Ê¨Pº≤¿ª°A±N∑|¶©" << LOSE_GAME_POINT << "§¿";
+    gotoxy(x, y + 18); cout << "πC¿∏Æ…∂°¶@" << TIME_LIMIT << "¨Ì°A¶bÆ…∂°§∫•¥®Ï" << VICTORY_GATE << "§¿ßY•i≥q√ˆ°C";
+    gotoxy(x, y + 20); cout << "´ˆ§U•Ù∑N¡‰∂}©lπC¿∏...";
 }
 
 void GameModeMessage()
@@ -290,9 +298,18 @@ void GameModeMessage()
     DrawWhiteSpace(0, 0, BORDER_RIGHT_WIDE, BORDER_DOWN);
     int x = 40;
     int y = 10;
-    gotoxy(x, y + 1); cout << " Ë´ãÈÅ∏ÊìáÈÅäÊà≤Èõ£Â∫¶:";
-    gotoxy(x, y + 3); cout << " Á∞°ÂñÆÔºöÊåâ E";
-    gotoxy(x, y + 5); cout << " Âõ∞Èõ£ÔºöÊåâ H";
+    gotoxy(x, y + 1); 
+    cout << " Ω–øÔæ‹πC¿∏√¯´◊:";
+    gotoxy(x, y + 3); 
+    cout << " ¬≤≥Ê°G´ˆ E";
+    gotoxy(x, y + 5); 
+    cout << " ßx√¯°G´ˆ H" ;
+    gotoxy(110, y + 20);
+    cout << " ±m≥J´ˆG ";
+    gotoxy(0, 0);
+    cout << " ";
+    gotoxy(x + 15, y + 5);
+    cout << " ";
 }
 
 void VictoryMessage()
@@ -301,9 +318,9 @@ void VictoryMessage()
     int x = 25;
     int y = 10;
 
-    gotoxy(x, y + 3); cout << " ÊÅ≠Âñú‰Ω†Èõ¢ÊïëÂá∫ËòøËéâË∂ä‰æÜË∂äÊé•Ëøë‰∫Ü ";
+    gotoxy(x, y + 3); cout << " Æ•≥ﬂßA¬˜±œ•X≈⁄≤˙∂V®”∂V±µ™Ò§F ";
 
-    gotoxy(x, y + 8); cout << " Ë´ãÊúüÂæÖ‰∏ãÈÉ®‰ΩúÂìÅ ";
+    gotoxy(x, y + 8); cout << " Ω–¥¡´›§G≥°¶± ";
 }
 
 void DefeatMessage()
@@ -312,9 +329,9 @@ void DefeatMessage()
     int x = 25;
     int y = 10;
 
-    gotoxy(x, y + 3); cout << " ‰Ω†Â§±Êïó‰∫Ü Âø´ÈªûÂÜçÊ¨°Âá∫Áôº ";
+    gotoxy(x, y + 3); cout << " ßA•¢±—§F ß÷¬I¶A¶∏•Xµo ";
 
-    gotoxy(x, y + 8); cout << " Â∞±‰Ω†ÈÄôÈÄüÂ∫¶ ËòøËéâÈÉΩÈï∑Â§ß‰∫Ü ";
+    gotoxy(x, y + 8); cout << " ¥NßA≥o≥t´◊ ≈⁄≤˙≥£™¯§j§F ";
 }
 
 void PlayAgainMessage()
@@ -323,7 +340,7 @@ void PlayAgainMessage()
     int x = 10;
     int y = 10;
 
-    gotoxy(x, y + 3); cout << " ÂÜçÁé©‰∏ÄÊ¨°Ë´ãÊåâ Y ÁµêÊùüË´ãÊåâ N ";
+    gotoxy(x, y + 3); cout << " ¶A™±§@¶∏Ω–´ˆ Y µ≤ßÙΩ–´ˆ N ";
 
 }
 
@@ -333,7 +350,7 @@ void GoodbyeMessage()
     int x = 15;
     int y = 10;
 
-    gotoxy(x, y + 3); cout << " ÊÑüË¨ù‰Ω†ÁöÑÈÅäÁé© ";
+    gotoxy(x, y + 3); cout << " ∑P¡¬ßA™∫πC™± ";
 
     gotoxy(x, y + 6); cout << " Thanks for playing!";
 }

@@ -10,11 +10,13 @@ public:
     void EnemyErase();
     void EnemyMove();
     bool EnemyisOut();
-    static void setGameMode(bool level);
+    static void setGameMode(int level);
+    static int getGameMode();
+    void gotoxy(double, double);
 private:
-    double x;
-    double y;
-    static bool gameMode;
+    double x; 
+    double y; 
+    static int gameMode;
 };
 
 #endif

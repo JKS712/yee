@@ -1,9 +1,11 @@
 #include"Enemy.h"
 #include<iostream>
 #include<windows.h>
+
 #define BORDER_DOWN 28
 #define SPEED_ENEMY_EASY 0.1 
 #define SPEED_ENEMY_HARD 0.5
+#define SPEED_SUPER_HARD 1.0
 using namespace std;
 
 Enemy::Enemy(double x, double y)
@@ -21,20 +23,25 @@ double Enemy::Y()
 }
 void Enemy::EnemyDraw()
 {
-    gotoxy(x, y); cout << "å£";
+    gotoxy(x, y); 
+    cout << "¤f";
 }
 void Enemy::EnemyErase()
 {
-    gotoxy(x, y); cout << "  ";
+    gotoxy(x, y); 
+    cout << "  ";
 }
 void Enemy::EnemyMove()
 {
     EnemyErase();
 
-    if (gameMode == 1)
-        y += SPEED_ENEMY_EASY; // move a SPEED_SCORE59 unit downward
-    else
+    if (gameMode == 2)
+        y += SPEED_SUPER_HARD;
+    else if (gameMode == 1)
+        y += SPEED_ENEMY_EASY;
+    else if (gameMode == 0)
         y += SPEED_ENEMY_HARD;
+    
 
     EnemyDraw();
 }
@@ -45,18 +52,22 @@ bool Enemy::EnemyisOut()
     else
         return false;
 }
-bool Enemy::gameMode = 1; // the user play the game in easy mode by default
+int Enemy::gameMode = 1;
 
-void Enemy::setGameMode(bool level)
+void Enemy::setGameMode(int level)
 {
     gameMode = level;
 }
 
-void gotoxy(double x, double y)
+int Enemy::getGameMode()
+{
+    return gameMode;
+}
+void Enemy::gotoxy(double x, double y)
 {
     HANDLE hCon = GetStdHandle(STD_OUTPUT_HANDLE);
     COORD dwPos;
-    dwPos.X = x; // start from 0
-    dwPos.Y = y; // start from 0
+    dwPos.X = x; 
+    dwPos.Y = y;
     SetConsoleCursorPosition(hCon, dwPos);
 }

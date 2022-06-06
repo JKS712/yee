@@ -9,8 +9,9 @@ public:
     void PlayerDraw();
     void PlayerErase();
     void PlayerMove();
+    void gotoxy(double, double);
 private:
-    double x; 
+    double x;
     double y;
 };
 

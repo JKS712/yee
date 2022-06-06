@@ -2,6 +2,7 @@
 #include<iostream>
 #include<conio.h>
 #include<windows.h>
+
 #define KEY_UP    72 
 #define KEY_DOWN  80
 #define KEY_LEFT  75
@@ -31,7 +32,7 @@ double Player::Y()
 void Player::PlayerDraw()
 {
     gotoxy(x, y);
-    cout << "å‡¸";
+    cout << "¥Y";
 }
 void Player::PlayerErase()
 {
@@ -40,11 +41,11 @@ void Player::PlayerErase()
 }
 void Player::PlayerMove()
 {
-    if (kbhit())
+    if (_kbhit())
     {
         PlayerErase();
 
-        char key = getch();
+        char key = _getch();
         switch (key)
         {
         case KEY_LEFT:
@@ -75,11 +76,11 @@ void Player::PlayerMove()
     }
     PlayerDraw();
 }
-void gotoxy(double x, double y) 
-{   
+void Player::gotoxy(double x, double y)
+{
     HANDLE hCon = GetStdHandle(STD_OUTPUT_HANDLE);
     COORD dwPos;
-    dwPos.X = x; // start from 0
-    dwPos.Y = y; // start from 0
+    dwPos.X = x; 
+    dwPos.Y = y;
     SetConsoleCursorPosition(hCon, dwPos);
 }

@@ -82,7 +82,7 @@ void Initialize()
 
     LPCWSTR a = L"我絕對不會說有彩蛋";
     SetConsoleTitle(a);
-
+    system("mode con cols=125 lines=35");
 
     HANDLE hCon = GetStdHandle(STD_OUTPUT_HANDLE);
     CONSOLE_CURSOR_INFO cci;
@@ -125,7 +125,7 @@ void ChooseGameMode()
 
 bool StartGame()
 {
-    DrawWhiteSpace(0, 0, BORDER_RIGHT_WIDE, BORDER_DOWN);
+    DrawWhiteSpace(0, 0, 125, 35);
 
     std::chrono::seconds timeLimit(TIME_LIMIT);
     std::chrono::seconds duration(0);
@@ -304,8 +304,8 @@ void GameModeMessage()
     cout << " 簡單：按 E";
     gotoxy(x, y + 5); 
     cout << " 困難：按 H" ;
-    gotoxy(110, y + 20);
-    cout << " 彩蛋按G ";
+    gotoxy(120, 34);
+    cout << "彩蛋按G";
     gotoxy(0, 0);
     cout << " ";
     gotoxy(x + 15, y + 5);
